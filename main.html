@@ -22,6 +22,7 @@
                     <span id="temp-value"></span>&deg;<span id="temp-unit">C</span>
                 </h2>
                 <div id="icon"></div>
+                <div id="weather"></div>
             </div>
         </section>
 
@@ -29,7 +30,7 @@
             // http://stackoverflow.com/a/28792224
             var geocoder;
             var city, country, weather;
-            var latitude, longitude, temp_kelvin;
+            var latitude, longitude, tempKelvin, tempCelcius, tempFahrenheit; tempKelvin - 273.15;
 
             function onSuccess(position) {
                 lat = position.coords.latitude;
@@ -83,13 +84,12 @@
 
             function setWeatherIcon(weather, icon) {
                 console.log(weather + " " + icon);
-                document.getElementById("icon").innerHTML = icon;
-                document.getElementById("icon").innerHTML =
-                    '<img src="' + icon + ' alt=' + weather + '>';
+                document.getElementById("weather").innerHTML = "<img src=" + icon +
+                    " alt="+ weather+ ">";
             }
 
             function setTemperature(temp, unit) {
-                document.getElementById("temp-value").innerHTML = temp;
+                document.getElementById("temp-value").innerHTML = Math.floor(temp);
                 document.getElementById("temp-unit").innerHTML = unit;
             }
 
@@ -100,10 +100,13 @@
                     weather = data["weather"][0]["main"];
                     var icon = "http://openweathermap.org/img/w/" +
                         data["weather"][0]["icon"] + ".png"
-                    temp_kelvin = data["main"].temp;
+                    tempKelvin = data["main"].temp;
 
                     setWeatherIcon(weather, icon);
-                    setTemperature(temp_kelvin - 273.15, "C");
+
+                    tempCelcius = tempKelvin - 273.15;
+                    tempFahrenheit = (tempKelvin * 9 / 5) - 459.67;
+                    setTemperature(tempCelcius, "C");
                 });
             }
 
@@ -117,9 +120,9 @@
 
                 document.getElementById("temp-unit").addEventListener('click', function() {
                     if(this.innerHTML === "C") {
-                        setTemperature((temp_kelvin * 9 / 5) - 459.67, "F")
+                        setTemperature(tempFahrenheit, "F")
                     } else {
-                        setTemperature(temp_kelvin - 273.15, "C");
+                        setTemperature(tempCelcius, "C");
                     }
                 });
             });
