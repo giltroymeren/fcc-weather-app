@@ -103,7 +103,7 @@
                     temp_kelvin = data["main"].temp;
 
                     setWeatherIcon(weather, icon);
-                    setTemperature(temp_kelvin - 237.15, "C");
+                    setTemperature(temp_kelvin - 273.15, "C");
                 });
             }
 
@@ -119,7 +119,7 @@
                     if(this.innerHTML === "C") {
                         setTemperature((temp_kelvin * 9 / 5) - 459.67, "F")
                     } else {
-                        setTemperature(temp_kelvin - 237.15, "C");
+                        setTemperature(temp_kelvin - 273.15, "C");
                     }
                 });
             });
