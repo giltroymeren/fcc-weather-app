@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<!--
+    FreeCodeCamp: Show the Local Weather
+    https://www.freecodecamp.com/challenges/show-the-local-weather
+-->
+<html>
+    <head>
+        <title>Weather App</title>
+        <meta charset="utf-8" />
+
+        <script src="https://use.fontawesome.com/2127f29eea.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function(event) {
+                initialize();
+            });
+
+            // http://stackoverflow.com/a/28792224
+            var geocoder;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
+
+            function onSuccess(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                getLocation(lat, lng);
+            }
+
+            function onError(position) {
+                console.error("Failure to access geolocation.");
+            }
+
+            function initialize() {
+                geocoder = new google.maps.Geocoder();
+            }
+
+            function getLocation(latitude, longitude) {
+                var coordinates = new google.maps.LatLng(latitude, longitude);
+                geocoder.geocode({latLng: coordinates}, function(result, status) {
+                    if(status == google.maps.GeocoderStatus.OK) {
+                        if(result[1]) {
+                            document.getElementById("location").innerHTML =
+                                result[0].address_components[1].short_name + ", " +
+                                result[0].address_components[4].short_name;
+                            document.getElementById("temperature").innerHTML = city;
+                        } else {
+                            console.log("No results found.");
+                        }
+                    } else {
+                        console.error("Geocoder failed because of " + status);
+                    }
+                });
+            }
+        </script>
+    </head>
+
+    <body>
+        <section>
+            <header>
+                <h1>Weather App</h1>
+            </header>
+            <div>
+                <h2 id="location"></h2>
+                <h2 id="temperature"></h2>
+                <div id="icon"></div>
+            </div>
+        </section>
+    </body>
+</html>
